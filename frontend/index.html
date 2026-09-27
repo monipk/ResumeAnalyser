@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1220" />
+  <title>ResumeSync AI — AI Interview</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <main class="app-shell">
+
+    <!-- HEADER -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">I</div>
+        <div>
+          <div class="brand-name">ResumeSync AI</div>
+          <div class="brand-subtitle">AI Interview Studio</div>
+        </div>
+      </div>
+
+      <div class="server-status" id="serverStatus">
+        <span class="status-dot"></span>
+        Backend ready
+      </div>
+    </header>
+
+    <!-- UPLOAD SCREEN -->
+    <section id="uploadScreen" class="screen active">
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">AI-POWERED INTERVIEWING</div>
+          <h1>Turn a resume into a real interview.</h1>
+          <p>
+            Upload a resume and let the system identify the candidate's
+            professional field, create personalized questions, and evaluate
+            spoken answers.
+          </p>
+
+          <div class="hero-pills">
+            <span>Any profession</span>
+            <span>10 personalized questions</span>
+            <span>Voice interview</span>
+            <span>AI correction</span>
+          </div>
+        </div>
+
+        <div class="glass-card upload-card">
+          <div class="card-heading">
+            <div>
+              <div class="small-label">START SESSION</div>
+              <h2>Upload resume</h2>
+            </div>
+            <div class="file-icon">PDF</div>
+          </div>
+
+          <label class="drop-zone" id="dropZone" for="resumeInput">
+            <input
+              id="resumeInput"
+              type="file"
+              accept="application/pdf,.pdf"
+              hidden
+            />
+
+            <div class="upload-symbol">↑</div>
+            <div class="drop-title">Drop your resume here</div>
+            <div class="drop-subtitle">or click to browse a PDF</div>
+            <div class="selected-file" id="selectedFile">
+              No file selected
+            </div>
+          </label>
+
+          <button class="primary-btn" id="analyzeBtn" disabled>
+            Analyze Resume
+            <span>→</span>
+          </button>
+
+          <div class="micro-copy">
+            Your resume is processed by the connected FastAPI backend.
+          </div>
+
+          <div class="error-box hidden" id="uploadError"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERVIEW SCREEN -->
+    <section id="interviewScreen" class="screen">
+      <div class="interview-layout">
+
+        <aside class="glass-card profile-card">
+          <div class="small-label">CANDIDATE PROFILE</div>
+
+          <div class="profile-avatar" id="profileAvatar">AI</div>
+
+          <h2 id="roleTitle">Professional</h2>
+          <p id="fieldTitle">Field</p>
+
+          <div class="profile-meta">
+            <div>
+              <span>Specialization</span>
+              <strong id="specialization">—</strong>
+            </div>
+
+            <div>
+              <span>Experience</span>
+              <strong id="experienceLevel">—</strong>
+            </div>
+
+            <div>
+              <span>Confidence</span>
+              <strong id="confidence">—</strong>
+            </div>
+          </div>
+
+          <div class="profile-reason">
+            <span class="small-label">AI BASIS</span>
+            <p id="roleReason">—</p>
+          </div>
+
+          <button class="secondary-btn" id="restartBtn">
+            New Interview
+          </button>
+        </aside>
+
+        <div class="interview-main">
+
+          <div class="question-header">
+            <div>
+              <div class="small-label">LIVE INTERVIEW</div>
+              <div class="question-number" id="questionNumber">
+                Question 1 of 10
+              </div>
+            </div>
+
+            <div class="progress-track">
+              <div class="progress-fill" id="progressFill"></div>
+            </div>
+          </div>
+
+          <div class="glass-card question-card">
+            <div class="question-topline">
+              <span class="tag" id="questionCategory">Role-Specific</span>
+              <span class="difficulty" id="questionDifficulty">Medium</span>
+            </div>
+
+            <h1 id="questionText">
+              Loading interview question...
+            </h1>
+
+            <button class="voice-question-btn" id="speakBtn">
+              <span class="sound-icon">◉</span>
+              <span id="speakLabel">Read Question Aloud</span>
+            </button>
+          </div>
+
+          <div class="glass-card answer-card">
+            <div class="answer-head">
+              <div>
+                <div class="small-label">YOUR RESPONSE</div>
+                <h3>Speak naturally</h3>
+              </div>
+
+              <div class="listening-state" id="listeningState">
+                Ready
+              </div>
+            </div>
+
+            <div class="transcript-wrap">
+              <textarea
+                id="answerText"
+                rows="7"
+                placeholder="Your spoken answer will appear here..."
+              ></textarea>
+            </div>
+
+            <div class="voice-controls">
+              <button class="mic-btn" id="startMicBtn">
+                <span class="mic-pulse"></span>
+                Start Answer
+              </button>
+
+              <button class="secondary-btn" id="stopMicBtn" disabled>
+                Stop
+              </button>
+
+              <button class="primary-btn compact" id="submitAnswerBtn">
+                Submit Answer
+                <span>→</span>
+              </button>
+            </div>
+
+            <div class="speech-note" id="speechSupport">
+              Voice input uses your browser's speech recognition.
+            </div>
+          </div>
+
+          <div class="glass-card evaluation-card hidden" id="evaluationCard">
+            <div class="evaluation-head">
+              <div>
+                <div class="small-label">AI CORRECTION</div>
+                <h2 id="correctnessLabel">Partially Correct</h2>
+              </div>
+
+              <div class="score-circle">
+                <span id="scoreValue">0</span>
+                <small>/10</small>
+              </div>
+            </div>
+
+            <div class="feedback-grid">
+              <div class="feedback-panel correct-panel">
+                <div class="feedback-title">What was correct</div>
+                <p id="correctPart">—</p>
+              </div>
+
+              <div class="feedback-panel error-panel">
+                <div class="feedback-title">Error in explanation</div>
+                <p id="errorPart">—</p>
+              </div>
+
+              <div class="feedback-panel correction-panel">
+                <div class="feedback-title">Correct explanation</div>
+                <p id="correctionPart">—</p>
+              </div>
+            </div>
+
+            <div class="voice-feedback">
+              <div>
+                <div class="feedback-title">Spoken feedback</div>
+                <p id="voiceFeedback">—</p>
+              </div>
+
+              <button class="icon-btn" id="speakFeedbackBtn" title="Speak feedback">
+                🔊
+              </button>
+            </div>
+
+            <button class="primary-btn next-btn" id="nextBtn">
+              Next Question
+              <span>→</span>
+            </button>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- FINAL SCREEN -->
+    <section id="resultScreen" class="screen">
+      <div class="result-wrap">
+
+        <div class="small-label">INTERVIEW COMPLETE</div>
+        <h1>Session finished.</h1>
+        <p class="result-subtitle">
+          Your answers have been processed by the AI evaluation engine.
+        </p>
+
+        <div class="result-grid">
+          <div class="glass-card result-score-card">
+            <div class="small-label">FINAL SCORE</div>
+            <div class="big-score" id="finalScore">0</div>
+            <div class="score-denom" id="finalDenom">/ 100</div>
+          </div>
+
+          <div class="glass-card result-stat-card">
+            <div class="small-label">PERCENTAGE</div>
+            <div class="stat-value" id="finalPercentage">0%</div>
+          </div>
+
+          <div class="glass-card result-stat-card">
+            <div class="small-label">QUESTIONS</div>
+            <div class="stat-value" id="finalQuestionCount">0</div>
+          </div>
+        </div>
+
+        <div class="glass-card summary-card">
+          <div class="small-label">SESSION SUMMARY</div>
+          <div id="summaryList"></div>
+        </div>
+
+        <button class="primary-btn" id="resultRestartBtn">
+          Start New Interview
+          <span>→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- GLOBAL LOADER -->
+    <div class="loader-overlay hidden" id="loaderOverlay">
+      <div class="loader-card glass-card">
+        <div class="loader-ring"></div>
+        <h3 id="loaderTitle">Analyzing resume...</h3>
+        <p id="loaderText">Preparing your interview.</p>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

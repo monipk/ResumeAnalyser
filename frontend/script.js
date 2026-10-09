@@ -1,4 +1,6 @@
-const API_BASE = "http://127.0.0.1:8000";
+const CONFIGURED_API_BASE = String(window.RESUMESYNC_API_BASE || "").trim().replace(/\/+$/, "");
+const IS_LOCAL_HOST = ["localhost", "127.0.0.1"].includes(window.location.hostname);
+const API_BASE = CONFIGURED_API_BASE || (IS_LOCAL_HOST ? "http://127.0.0.1:8000" : "");
 
 let questions = [];
 let currentQuestionIndex = 0;
@@ -231,6 +233,10 @@ async function analyzeResume() {
 
 
     try {
+
+        if (!API_BASE) {
+            throw new Error("The backend URL is not configured. Set window.RESUMESYNC_API_BASE in frontend/config.js to your deployed FastAPI URL.");
+        }
 
         const response =
             await fetch(
@@ -806,6 +812,10 @@ async function submitAnswer() {
 
     try {
 
+        if (!API_BASE) {
+            throw new Error("The backend URL is not configured. Set window.RESUMESYNC_API_BASE in frontend/config.js to your deployed FastAPI URL.");
+        }
+
         const response =
             await fetch(
                 `${API_BASE}/evaluate-answer`,
@@ -1268,37 +1278,31 @@ function resetApplication() {
 
 async function checkBackend() {
 
+    if (!API_BASE) {
+        $("serverStatus").innerHTML = `
+            <span class="status-dot needs-config"></span>
+            Backend URL needed
+        `;
+        return;
+    }
+
     try {
 
-        const response =
-            await fetch(
-                `${API_BASE}/`
-            );
-
+        const response = await fetch(`${API_BASE}/`);
 
         if (!response.ok) {
-
-            throw new Error();
-
+            throw new Error("Backend health check failed");
         }
-
 
         $("serverStatus").innerHTML = `
             <span class="status-dot"></span>
-            Backend ready
+            Backend connected
         `;
-
 
     } catch {
 
         $("serverStatus").innerHTML = `
-            <span
-                class="status-dot"
-                style="
-                    background:#c78989;
-                    box-shadow:none;
-                "
-            ></span>
+            <span class="status-dot offline"></span>
             Backend offline
         `;
     }

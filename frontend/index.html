@@ -3,11 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0b1220" />
-  <title>ResumeSync AI — AI Interview</title>
+  <meta name="theme-color" content="#f5f7f2" />
+  <meta name="description" content="Practice a personalized mock interview built from your resume, with AI feedback and voice answers." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <title>ResumeSync AI — Interview Studio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
 
@@ -20,16 +22,16 @@
     <!-- HEADER -->
     <header class="topbar">
       <div class="brand">
-        <div class="brand-mark">I</div>
+        <div class="brand-mark" aria-hidden="true">R</div>
         <div>
           <div class="brand-name">ResumeSync AI</div>
           <div class="brand-subtitle">AI Interview Studio</div>
         </div>
       </div>
 
-      <div class="server-status" id="serverStatus">
+      <div class="server-status" id="serverStatus" role="status" aria-live="polite">
         <span class="status-dot"></span>
-        Backend ready
+        Checking backend…
       </div>
     </header>
 
@@ -37,12 +39,10 @@
     <section id="uploadScreen" class="screen active">
       <div class="hero-grid">
         <div class="hero-copy">
-          <div class="eyebrow">AI-POWERED INTERVIEWING</div>
-          <h1>Turn a resume into a real interview.</h1>
+          <div class="eyebrow">YOUR NEXT INTERVIEW STARTS HERE</div>
+          <h1>Turn your resume into a <span>real interview.</span></h1>
           <p>
-            Upload a resume and let the system identify the candidate's
-            professional field, create personalized questions, and evaluate
-            spoken answers.
+            Get interview practice built around your experience. We identify your professional focus, generate relevant questions, and help you sharpen each answer with clear AI feedback.
           </p>
 
           <div class="hero-pills">
@@ -83,13 +83,35 @@
             <span>→</span>
           </button>
 
-          <div class="micro-copy">
-            Your resume is processed by the connected FastAPI backend.
-          </div>
+          <div class="micro-copy">Your resume is sent to your configured API for analysis. No account is required.</div>
 
-          <div class="error-box hidden" id="uploadError"></div>
+          <div class="error-box hidden" id="uploadError" role="alert"></div>
         </div>
       </div>
+
+      <section class="steps-strip" aria-labelledby="stepsTitle">
+        <div class="steps-heading">
+          <div>
+            <div class="small-label">HOW IT WORKS</div>
+            <h2 id="stepsTitle">A smarter way to prepare.</h2>
+          </div>
+          <p>Move from resume to interview-ready with a focused practice session.</p>
+        </div>
+        <div class="steps-grid">
+          <article class="step-item">
+            <div class="step-number">01</div>
+            <div><h3>Understand your profile</h3><p>We map the experience and skills in your resume to a likely role.</p></div>
+          </article>
+          <article class="step-item">
+            <div class="step-number">02</div>
+            <div><h3>Practice out loud</h3><p>Answer tailored questions by typing or using supported voice input.</p></div>
+          </article>
+          <article class="step-item">
+            <div class="step-number">03</div>
+            <div><h3>Improve with feedback</h3><p>Review scores, strengthen explanations, and see your final report.</p></div>
+          </article>
+        </div>
+      </section>
     </section>
 
     <!-- INTERVIEW SCREEN -->
@@ -305,6 +327,7 @@
 
   </main>
 
+  <script src="config.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
